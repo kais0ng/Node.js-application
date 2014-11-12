@@ -1,4 +1,4 @@
-var mysql = require('mysql');
+var pool = require('../models/dbConnection');
 
 function Post(username, post){
 	this.user = username;
@@ -11,34 +11,21 @@ Post.prototype.save = function save(callback){
 		user: this.user,
 		post: this.post,
 	};
-	var connection = mysql.createConnection({
-		host : 'localhost',
-		port : '3306',
-		user : 'root',
-		password : '',
-		database : 'nodejs'
-	});
-	connection.connect();
-	connection.query('insert into posts set ?', {
+	pool.getConnection(function(err, connection){
+		connection.query('insert into posts set ?', {
 			username : newPost.user,
 			post : newPost.post
-	}, function(err, fields) {
-		callback(err);
-	});
-	connection.end();
+		}, function(err, result) {
+			callback(err);
+			connection.release();
+		});
+	});	
 };
 
 Post.get = function get(username, callback){
 	var values = [username];
-	var connection = mysql.createConnection({
-		host : 'localhost',
-		port : '3306',
-		user : 'root',
-		password : '',
-		database : 'nodejs'
-	});
-	connection.connect();
-	if(username == null){
+	pool.getConnection(function(err, connection){
+		if(username == null){
 		connection.query('select * from posts', function(err, results){
 			if(err)
 				throw err;
@@ -54,6 +41,7 @@ Post.get = function get(username, callback){
 				}
 				callback(err, posts); 
 			}
+			connection.release();
 		});
 	}else{
 		connection.query('select * from posts where username= ?', values, 
@@ -72,7 +60,8 @@ Post.get = function get(username, callback){
 				}
 				callback(err, posts); 
 			}
+			connection.release();
 		});
 	}
-	connection.end();
+	});
 };

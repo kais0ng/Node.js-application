@@ -1,4 +1,4 @@
-var mysql = require('mysql');
+var pool = require('../models/dbConnection');
 
 function User(user){
 	this.name = user.name;
@@ -11,51 +11,37 @@ User.prototype.save = function save(callback){
 		name: this.name,
 		password: this.password,
 	};
-	var connection = mysql.createConnection({
-		host : 'localhost',
-		port : '3306', //可以不填写，默认为3306
-		user : 'root',
-		password : '',
-		database : 'nodejs'
+	var insertionData = [newuser.name, newuser.password];
+	pool.getConnection(function(err, connection){
+	
+		connection.query('INSERT INTO users(name, password) VALUES(?,?)', 
+		insertionData, function(err, result) {
+			callback(err);
+			connection.release();
+		});
 	});
-	connection.connect();
-	connection.query('insert into users set ?', {
-			name : this.name,
-			password : this.password
-	}, function(err, fields) {
-		callback(err);
-		console.log('Insert is success.');
-		//req.flash('info','User created');
-	});
-	connection.end();
 }
 
 User.get = function get(username, password, callback){
 	var values = [username, password];
-	var connection = mysql.createConnection({
-		host : 'localhost',
-		port : '3306',
-		user : 'root',
-		password : '',
-		database : 'nodejs'
+	pool.getConnection(function(err, connection){
+		connection.query('select * from users where name= ? and password = ?', values, function(err, results){
+			if(err)
+				throw err;
+			if(results.length == 0){
+				callback(err, null);
+				console.log('the user does not exit.');
+			}else{
+				console.log(results);
+				var user = new User({
+					name: username,
+					password: password,
+				});
+				callback(err, user); 
+			}
+			connection.release();
+		});
 	});
-	connection.connect();
-	connection.query('select * from users where name= ? and password = ?', values, 
-	function(err, results, fields){
-		if(err)
-			throw err;
-		if(results.length == 0){
-			callback(err, null);
-			console.log('the user does not exit.');
-		}else{
-			var user = new User({
-				name: username,
-				password: password,
-			});
-			callback(err, user); 
-		}
-	});
-	connection.end();
 }
 
 
