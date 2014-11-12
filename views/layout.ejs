@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+  <style type="text/css">
+  body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+  }
+  </style>
+  <link href="stylesheets/bootstrap-responsive.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></a> <a class="brand" href="/">Microblog</a>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li><a href="/">Home</a></li>
+			<% if(!user){ %>
+            <li><a href="/login">Sign in</a></li>
+            <li><a href="/registration">Sign up</a></li>
+			<% } else { %>
+			<li><a href="/logout">Log out</a></li>
+			<% } %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="container" class="container">
+	<% if (success) { %>
+	<div class="alert alert-success">
+	<%= success %>
+	</div>
+	<% } %>
+	<% if (error) { %>
+	<div class="alert alert-error">
+	<%= error %>
+	</div>
+	<% } %>
+	<%- body %>
+    <hr />
+
+    <footer>
+      <p><a>kaisong</a> 2014</p>
+    </footer>
+  </div>
+  <script src="/javascripts/jquery.js"></script> 
+  <script src="/javascripts/bootstrap.js"></script>
+</body>
+</html>

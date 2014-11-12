@@ -1,0 +1,13 @@
+<% if (!user) { %>
+<div class="hero-unit">
+	<h1>Welcome to Microblog</h1>
+	<p>Microblog is a microblog based on Nodejs.</p>
+	<p>
+		<a class="btn btn-primary btn-large" href="/login">Sign In</a>
+		<a class="btn btn-large" href="/registration">Sign Up</a>
+	</p>
+</div>
+<% } else { %>
+<% include say.ejs %>
+<% } %>
+<% include posts.ejs %>
