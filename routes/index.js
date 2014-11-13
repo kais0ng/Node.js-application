@@ -1,7 +1,7 @@
 /* GET home page. */
 var mysql = require('mysql');
 var User = require('../models/user.js');
-var Post = require('../models/Post.js');
+var Post = require('../models/post.js');
 exports.index = function(req, res){
 	Post.get(null, function(err, posts){
 		if(err){
