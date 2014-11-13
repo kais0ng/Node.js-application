@@ -69,7 +69,7 @@ exports.post = function(req, res){
 		}
 		req.flash('success', '发表成功.');
 		console.log('发表成功');
-		res.redirect('/u/' + currentUser.name);
+		res.redirect('/user/' + currentUser.name);
 	});
 };
 exports.getPosts = function(req, res){

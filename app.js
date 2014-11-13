@@ -54,6 +54,6 @@ app.get('/login', routes.login);
 app.post('/login', routes.postLogin);
 app.get('/logout', routes.logout);
 app.post('/post', routes.post);
-app.get('/u/:user', routes.getPosts);
+app.get('/user/:user', routes.getPosts);
 app.listen(9000);
 console.log("Express server listening on port in %s mode", app.settings.env);
